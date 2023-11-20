@@ -2,24 +2,22 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
-    // Счетчики для каждой длины слова
-    private static AtomicInteger beautifulWordsCount3 = new AtomicInteger(0);
-    private static AtomicInteger beautifulWordsCount4 = new AtomicInteger(0);
-    private static AtomicInteger beautifulWordsCount5 = new AtomicInteger(0);
+    private static final AtomicInteger beautifulWordsCount3 = new AtomicInteger(0);
+    private static final AtomicInteger beautifulWordsCount4 = new AtomicInteger(0);
+    private static final AtomicInteger beautifulWordsCount5 = new AtomicInteger(0);
 
     public static void main(String[] args) {
         Random random = new Random();
         String[] texts = new String[100_000];
 
-        // Генерация 100,000 текстов
         for (int i = 0; i < texts.length; i++) {
             texts[i] = generateText("abc", 3 + random.nextInt(3));
         }
 
         // Создание потоков для каждого критерия
-        Thread palindromeThread = new Thread(() -> countBeautifulWords(texts, 3, Main.beautifulWordsCount3, Main::isPalindrome));
-        Thread singleLetterThread = new Thread(() -> countBeautifulWords(texts, 4, Main.beautifulWordsCount4, Main::isSingleLetter));
-        Thread ascendingOrderThread = new Thread(() -> countBeautifulWords(texts, 5, Main.beautifulWordsCount5, Main::isAscendingOrder));
+        Thread palindromeThread = new Thread(() -> countBeautifulWords(texts));
+        Thread singleLetterThread = new Thread(() -> countBeautifulWords(texts));
+        Thread ascendingOrderThread = new Thread(() -> countBeautifulWords(texts));
 
         // Запуск потоков
         palindromeThread.start();
@@ -41,7 +39,6 @@ public class Main {
         }
     }
 
-    // Генератор текста
     public static String generateText(String letters, int length) {
         Random random = new Random();
         StringBuilder text = new StringBuilder();
@@ -51,28 +48,17 @@ public class Main {
         return text.toString();
     }
 
-    // Метод для проверки, является ли слово палиндромом
+    // проверка на наличие является ли слово палиндром
     public static boolean isPalindrome(String text) {
-        int left = 0;
-        int right = text.length() - 1;
-
-        while (left < right) {
-            if (text.charAt(left) != text.charAt(right)) {
-                return false;
-            }
-            left++;
-            right--;
-        }
-
-        return true;
+        return new StringBuilder(text).reverse().toString().equals(text);
     }
 
-    // Метод для проверки, состоит ли слово из одной и той же буквы
+    // проверка яв-ся ли слово из одной буквы
     public static boolean isSingleLetter(String text) {
         return text.chars().distinct().count() == 1;
     }
 
-    // Метод для проверки, идут ли буквы в слове по возрастанию
+    // проверка яв-ся ли словa по возростанию
     public static boolean isAscendingOrder(String text) {
         for (int i = 0; i < text.length() - 1; i++) {
             if (text.charAt(i) > text.charAt(i + 1)) {
@@ -82,12 +68,25 @@ public class Main {
         return true;
     }
 
-    // Метод для подсчета красивых слов определенной длины
-    public static void countBeautifulWords(String[] texts, int length, AtomicInteger counter, BeatifulWordChecker checker) {
+    // подсчет красивых слов в зависимости от длины 3, 4 или 5 явно
+    public static void countBeautifulWords(String[] texts) {
         for (String text : texts) {
-            if (text.length() == length && checker.check(text)) {
-                counter.incrementAndGet();
+            int length = text.length();
+
+            if (length == 3 ) {
+                if (isAscendingOrder(text) || isPalindrome(text) || isSingleLetter(text)) {
+                    beautifulWordsCount3.incrementAndGet();
+                }
+            } else if (length == 4) {
+                if (isAscendingOrder(text) || isPalindrome(text) || isSingleLetter(text)) {
+                    beautifulWordsCount4.incrementAndGet();
+                }
+            } else if (length == 5) {
+                if (isAscendingOrder(text) || isPalindrome(text) || isSingleLetter(text)) {
+                    beautifulWordsCount5.incrementAndGet();
+                }
             }
         }
     }
 }
+
