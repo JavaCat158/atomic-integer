@@ -42,8 +42,8 @@ public class Main {
         ascendingOrder.join();
         palindrome.join();
 
-        System.out.println("Красивых слов с длиной 3: " + counter3);
-        System.out.println("Красивых слов с длиной 4: " + counter4);
-        System.out.println("Красивых слов с длиной 5: " + counter5);
+        System.out.println("Красивых слов с длинной 3: " + counter3);
+        System.out.println("Красивых слов с длинной 4: " + counter4);
+        System.out.println("Красивых слов с длинной 5: " + counter5);
     }
 }

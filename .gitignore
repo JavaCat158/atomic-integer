@@ -4,6 +4,7 @@ out/
 !**/src/test/**/out/
 sychronized.iml
 ### Eclipse ###
+target/
 .idea
 .apt_generated
 .classpath
