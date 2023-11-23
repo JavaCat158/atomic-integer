@@ -1,11 +1,10 @@
 ### IntelliJ IDEA ###
-atomic.iml
-.idea
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+sychronized.iml
 ### Eclipse ###
+.idea
 .apt_generated
 .classpath
 .factorypath
